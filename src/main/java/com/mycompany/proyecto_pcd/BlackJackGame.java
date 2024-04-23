@@ -90,6 +90,7 @@ public class BlackJackGame implements Runnable {
                 int numOpcion = Integer.parseInt(opcion);
                 if (numOpcion == 1) {
                     System.out.println("Su puntuación final es: " + puntuacion);
+                    break;
                 } else if (numOpcion == 2) {
                     Carta carta = deck.sacarCarta();
                     playerHand.add(carta);
