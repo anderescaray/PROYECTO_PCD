@@ -14,13 +14,7 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class Handler implements Runnable {
-
-        private ObjectOutputStream oos; // Flujo de salida a la cliente
-        private ObjectInputStream ois;
-        private Scanner in;
-        private PrintWriter out;
-        private Socket conexion; // Conexión al cliente
-        private int conexionID;
+        private Socket conexion;
         private Baraja baraja;
 
         public Handler(Socket socket, Baraja baraja) {
@@ -30,13 +24,13 @@ public class Handler implements Runnable {
 
         public void run() {
              try {
-                ObjectOutputStream out = new ObjectOutputStream(conexion.getOutputStream());
-                Carta carta1 = baraja.sacarCarta();
-                Carta carta2 = baraja.sacarCarta();
-                Juego juego = new Juego(carta1, carta2);
+                ObjectOutputStream oos = new ObjectOutputStream(conexion.getOutputStream());
+                Carta c1 = baraja.sacarCarta();
+                Carta c2 = baraja.sacarCarta();
+                Juego mano = new Juego(c1, c2);
                 
                 // Enviar el juego al cliente
-                out.writeObject(juego);
+                oos.writeObject(mano);
                 
                 // Cerrar la conexión con el cliente
                 conexion.close();

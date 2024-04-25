@@ -39,8 +39,13 @@ public class Jugador {
             BufferedReader teclado = new BufferedReader(new InputStreamReader(System.in));
 
             System.out.println("Atento, comienza la partida");
+            System.out.println("");
+            Juego mano = (Juego) ois.readObject();
+            
+            System.out.println("MANO: "+mano);
+            System.out.println("VALOR: "+mano.getPuntuacion());
 
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             System.err.println(e.getMessage());
             e.printStackTrace(System.err);
             System.exit(1);

@@ -11,7 +11,7 @@ import java.util.ArrayList;
  *
  * @author alumno
  */
-public class Juego implements Serializable{
+public class Juego implements Serializable {
 
     private boolean sobrepasado = false;
     private int puntuacion = 0;
@@ -49,7 +49,6 @@ public class Juego implements Serializable{
     public void pedirCarta(Carta ca) {
 
         // Primero comprobamos si nos ha tocado un AS
-        
         if ("A".equals(ca.getValor())) {
             ases.add(ca);
         } else {
@@ -58,7 +57,6 @@ public class Juego implements Serializable{
 
         // Si nos ha tocado un AS y/o teníamos ya alguno, recalculamos la puntuacion
         // sino sumamos la nueva carta de manera normal
-        
         if (!ases.isEmpty()) {
             calcularPuntuacion();
         } else if ("J".equals(ca.getValor()) || "Q".equals(ca.getValor()) || "K".equals(ca.getValor())) {
@@ -71,7 +69,7 @@ public class Juego implements Serializable{
         comprobarSobrepasada();
 
     }
-     
+
     private void calcularPuntuacion() {
 
         puntuacion = 0;
@@ -100,5 +98,17 @@ public class Juego implements Serializable{
     public boolean comprobarSobrepasada() {
         sobrepasado = puntuacion > 21;
         return sobrepasado;
+    }
+
+    @Override
+    public String toString() {
+        String frase = "";
+        for (Carta e : cartas) {
+            frase = frase  + e+ ", ";
+        }
+        for (Carta a : ases) {
+            frase = frase + a;
+        }
+        return frase;
     }
 }
