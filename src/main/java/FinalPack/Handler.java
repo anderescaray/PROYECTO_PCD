@@ -4,48 +4,44 @@
  */
 package FinalPack;
 
-import java.io.EOFException;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class Handler implements Runnable {
-        private Socket conexion;
-        private Baraja baraja;
 
-        public Handler(Socket socket, Baraja baraja) {
-            conexion = socket;
-            this.baraja = baraja;
-        }
+    private Socket conexion;
+    private Baraja baraja;
 
-        public void run() {
-             try {
-                ObjectOutputStream oos = new ObjectOutputStream(conexion.getOutputStream());
-                Carta c1 = baraja.sacarCarta();
-                Carta c2 = baraja.sacarCarta();
-                Juego mano = new Juego(c1, c2);
-                
-                // Enviar el juego al cliente
-                oos.writeObject(mano);
-                
-                // Cerrar la conexión con el cliente
-                conexion.close();
-            } catch (IOException e) {
-                System.err.println("Error al manejar la conexión con el cliente: " + e.getMessage());
-                e.printStackTrace(System.err);
-            }
-        } 
-
-        
-
-        
-
-        
-
-         
-         
+    public Handler(Socket socket, Baraja baraja) {
+        conexion = socket;
+        this.baraja = baraja;
     }
+
+    public void run() {
+        try {
+            //Informamos de la mano al jugador
+            ObjectOutputStream oos = new ObjectOutputStream(conexion.getOutputStream());
+            Carta c1 = baraja.sacarCarta();
+            Carta c2 = baraja.sacarCarta();
+            Juego mano = new Juego(c1, c2);
+            oos.writeObject(mano);
+
+            //Ahora esperamos la respuesta del jugador
+            BufferedReader br = new BufferedReader(new InputStreamReader(conexion.getInputStream()));
+            String decision = (String) br.readLine();
+            if (decision.equals("Pedir")) {
+                //Carta c3=baraja.sacarCarta();
+            } else if (decision.equals("Plantarse")) {
+                
+            }
+
+        } catch (IOException e) {
+            System.err.println("Error al manejar la conexión con el cliente: " + e.getMessage());
+            e.printStackTrace(System.err);
+        }
+    }
+
+}
