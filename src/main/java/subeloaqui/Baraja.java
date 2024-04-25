@@ -4,6 +4,9 @@
  */
 package subeloaqui;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 public class Baraja {
@@ -25,14 +28,10 @@ public class Baraja {
     }//end constructor
 
     public void mezclar() {
+        List<Carta> barajaList = Arrays.asList(baraja);
+        Collections.shuffle(barajaList);
+        barajaList.toArray(baraja);
         contador = 0;
-
-        for (int i = 0; i < baraja.length; i++) {
-            int random = rand.nextInt(NUMERO_DE_CARTAS);
-            Carta t = baraja[i];
-            baraja[i] = baraja[random];
-            baraja[random] = t;
-        }
     }
 
     public String repartirCarta() {
