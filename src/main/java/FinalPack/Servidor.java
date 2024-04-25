@@ -23,49 +23,25 @@ public class Servidor {
         BufferedReader teclado = new BufferedReader(new InputStreamReader(System.in));
         Baraja baraja = new Baraja();
         System.out.println("Servidor BlackJack en ejecución");
-        
-        ExecutorService pool = Executors.newFixedThreadPool(10);
+
         try (ServerSocket listener = new ServerSocket(55555)) {
 
             System.out.println("Introduzca el numero de jugadores 2-8:");
-            int numjug = Integer.parseInt(teclado.readLine());//PONER ESTO MEJOR, Y EVITAR QUE META UNA LETRA EN VEZ DE UN NUMERO
+            int numjug = Integer.parseInt(teclado.readLine());
+            ExecutorService pool = Executors.newFixedThreadPool(numjug);
+
+            Socket[] listaSockets = new Socket[numjug];
             for (int i = 0; i < numjug; i++) {
-                Socket socket = listener.accept();
-                System.out.println("Jugador "+(i+1)+" conectado, "+(numjug-i-1)+" restantes");
-                //Thread jug=new Thread(new Handler(socket, baraja));
-                //jug.start();
-                pool.execute(new Handler(socket, baraja));
-                
+                listaSockets[i] = listener.accept();
+                System.out.println("Jugador " + (i + 1) + " conectado, " + (numjug - i - 1) + " restantes");  
             }
-
-            /*
+            System.out.println("La partida va a comenzar");
+            for(int i=0;i<numjug;i++){
+                pool.execute(new Handler(listaSockets[i], baraja));
+            }
+            //Faltaria ver que pasa si se ejecutan mas de 8 jugadores (deberia funcionar bien, y solo usar los 8 primeros)
             
-       
-        Juego[] jugadores = new Juego[numjug];
 
-        Carta carta1;
-        Carta carta2;
-
-        for (int i = 0; i < jugadores.length; i++) {
-            carta1 = baraja.sacarCarta();
-            carta2 = baraja.sacarCarta();
-            jugadores[i] = new Juego(carta1, carta2);
-        }
-
-        ExecutorService pool = Executors.newFixedThreadPool(500);
-        try (ServerSocket listener = new ServerSocket(59002)) {
-
-            Socket socket = listener.accept();
-            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-
-            // Enviar los datos del juego al cliente
-            out.writeObject(jugadores);
-
-            while (true) {
-                pool.execute(new Handler(listener.accept()));
-            }
-             */
-            //socket.close();
         } catch (IOException e) {
             System.err.println(e.getMessage());
             e.printStackTrace(System.err);
