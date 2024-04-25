@@ -21,7 +21,7 @@ import java.util.concurrent.Executors;
  */
 public class Jugador {
     private static final String SERVER_ADRESS = "127.0.0.1";
-    private static final int SERVER_PORT = 59002;
+    private static final int SERVER_PORT = 55555;
     /**
      * @param args the command line arguments
      */

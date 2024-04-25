@@ -4,8 +4,9 @@
  */
 package FinalPack;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
@@ -19,24 +20,27 @@ public class Servidor {
 
     public static void main(String[] args) {
 
+        BufferedReader teclado = new BufferedReader(new InputStreamReader(System.in));
         Baraja baraja = new Baraja();
-        System.out.println("Servidor BlackJack en ejecución, esperando jugadores");
+        System.out.println("Servidor BlackJack en ejecución");
+        
+        ExecutorService pool = Executors.newFixedThreadPool(10);
+        try (ServerSocket listener = new ServerSocket(55555)) {
 
-        
-        System.out.println("El servidor está esperando conexiones de clientes...");
-        try (ServerSocket listener = new ServerSocket(59002)) {
-            while (true) {
+            System.out.println("Introduzca el numero de jugadores 2-8:");
+            int numjug = Integer.parseInt(teclado.readLine());//PONER ESTO MEJOR, Y EVITAR QUE META UNA LETRA EN VEZ DE UN NUMERO
+            for (int i = 0; i < numjug; i++) {
                 Socket socket = listener.accept();
-                System.out.println("Un nuevo cliente se ha conectado");
-                new Thread(new Handler(socket, baraja)).start();
+                System.out.println("Jugador "+(i+1)+" conectado, "+(numjug-i-1)+" restantes");
+                //Thread jug=new Thread(new Handler(socket, baraja));
+                //jug.start();
+                //pool.execute(new Handler(listener.accept()));
+                
             }
-        
-        
-        /*
+
+            /*
             
-        //1. ESPERAR A QUE SE CONECTEN n<8 JUGADORES
-        //CUANDO SE HAYAN CONECTADO 8 JUGADORES, O CUANDO ELIJAS TU (CON UN MENU), INICIAR PARTIDA
-        int numjug = 8;//AQUI HAY Q CONTAR EL NUM DE JUGADORES
+       
         Juego[] jugadores = new Juego[numjug];
 
         Carta carta1;
@@ -60,8 +64,7 @@ public class Servidor {
             while (true) {
                 pool.execute(new Handler(listener.accept()));
             }
-            */
-            
+             */
             //socket.close();
         } catch (IOException e) {
             System.err.println(e.getMessage());
@@ -69,7 +72,5 @@ public class Servidor {
             System.exit(1);
         }
     }
-    
-    
 
 }
