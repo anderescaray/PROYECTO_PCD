@@ -25,7 +25,7 @@ public class Baraja {
             baraja[i] = new Carta(valores[i % 13]);
         }
 
-    }//end constructor
+    }
 
     public void mezclar() {
         List<Carta> barajaList = Arrays.asList(baraja);

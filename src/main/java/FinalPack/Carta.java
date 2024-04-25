@@ -37,7 +37,7 @@ public class Carta implements Serializable {
 
     @Override
     public String toString() {
-        return valor + " de " + palo;
+        return valor + " de " + String.valueOf(palo).toLowerCase();
     }
     
     
