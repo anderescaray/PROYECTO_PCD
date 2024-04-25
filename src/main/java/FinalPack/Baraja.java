@@ -30,7 +30,7 @@ public class Baraja {
         Collections.shuffle(cartas);
     }
 
-    public Carta sacarCarta() {
+    public synchronized Carta sacarCarta() {
         if (cartas.isEmpty()) {
             throw new IllegalStateException("La baraja está vacía");
         }
