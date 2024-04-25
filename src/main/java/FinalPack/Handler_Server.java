@@ -8,10 +8,12 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Handler_Server implements Runnable {
 
+        private ServerSocket server;
         private ObjectOutputStream output; // Flujo de salida a la cliente
         private ObjectInputStream input;
         private Socket conexion; // Conexión al cliente

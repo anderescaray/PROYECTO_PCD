@@ -21,4 +21,5 @@ public class Dealer {
     private boolean redondear = true;
     private ExecutorService executor; // will run players
     private ServerSocket server; // server socket
+    private Handler_Server[] sockServer; // Array de objetos para hacerlos hilos
 }
