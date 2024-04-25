@@ -38,7 +38,7 @@ public class Servidor {
             }
         }
 
-        try (ServerSocket listener = new ServerSocket(55555)) {
+        try (ServerSocket listener = new ServerSocket(55557)) {
 
             ExecutorService pool = Executors.newFixedThreadPool(numjug);
             

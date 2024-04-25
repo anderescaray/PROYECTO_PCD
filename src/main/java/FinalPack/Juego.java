@@ -4,13 +4,14 @@
  */
 package FinalPack;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *
  * @author alumno
  */
-public class Juego {
+public class Juego implements Serializable{
 
     private boolean sobrepasado = false;
     private int puntuacion = 0;

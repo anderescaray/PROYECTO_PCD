@@ -11,6 +11,7 @@ import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -20,27 +21,30 @@ import java.util.concurrent.Executors;
  * @author alumno
  */
 public class Jugador {
+
     private static final String SERVER_ADRESS = "127.0.0.1";
-    private static final int SERVER_PORT = 55555;
+    private static final int SERVER_PORT = 55557;
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-       try {
+        try {
+            System.out.println("Conectado, esperando al resto de jugadores...");
             Socket socket = new Socket(SERVER_ADRESS, SERVER_PORT);
+            BufferedReader entradaSocket = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintWriter salidaSocket = new PrintWriter(socket.getOutputStream(), true);
             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream()) ;
+            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
             BufferedReader teclado = new BufferedReader(new InputStreamReader(System.in));
-            
-            while(true){
-                
-            }
-            
-    }catch(IOException e){
-        System.err.println(e.getMessage());
+
+            System.out.println("Atento, comienza la partida");
+
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
             e.printStackTrace(System.err);
             System.exit(1);
+        }
+
     }
-    
-}
 }
