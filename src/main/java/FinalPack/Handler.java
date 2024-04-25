@@ -8,18 +8,22 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class Handler implements Runnable {
 
-        private ObjectOutputStream output; // Flujo de salida a la cliente
-        private ObjectInputStream input;
+        private ObjectOutputStream oos; // Flujo de salida a la cliente
+        private ObjectInputStream ois;
+        private Scanner in;
+        private PrintWriter out;
         private Socket conexion; // Conexión al cliente
         private int conexionID;
 
-        public Handler(int id) {
-            conexionID = id;
+        public Handler(Socket socket) {
+            conexion = socket;
         }
 
         public void run() {
