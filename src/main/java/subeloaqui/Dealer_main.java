@@ -4,17 +4,14 @@
  */
 package subeloaqui;
 
-/**
- *
- * @author alumno
- */
-public class subeloaqui {
+import javax.swing.JFrame;
 
-    /**
-     * @param args the command line arguments
-     */
+public class Dealer_main {
+
     public static void main(String[] args) {
-        // TODO code application logic here
+        Dealer dealer = new Dealer(); // Creamos el servidor
+        dealer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        dealer.runDeal(); 
     }
     
 }
