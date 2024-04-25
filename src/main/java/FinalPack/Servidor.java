@@ -41,9 +41,10 @@ public class Servidor {
         try (ServerSocket listener = new ServerSocket(55555)) {
 
             ExecutorService pool = Executors.newFixedThreadPool(numjug);
-
+            
             Socket[] listaSockets = new Socket[numjug];
             for (int i = 0; i < numjug; i++) {
+                System.out.println("Esperando jugadores...");
                 listaSockets[i] = listener.accept();
                 System.out.println("Jugador " + (i + 1) + " conectado, " + (numjug - i - 1) + " restantes");
             }
