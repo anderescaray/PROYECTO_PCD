@@ -11,14 +11,14 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Handler_Server implements Runnable {
+public class Handler implements Runnable {
 
         private ObjectOutputStream output; // Flujo de salida a la cliente
         private ObjectInputStream input;
         private Socket conexion; // Conexión al cliente
         private int conexionID;
 
-        public Handler_Server(int id) {
+        public Handler(int id) {
             conexionID = id;
         }
 
