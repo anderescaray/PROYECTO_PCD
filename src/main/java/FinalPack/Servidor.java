@@ -20,10 +20,16 @@ public class Servidor {
     public static void main(String[] args) {
 
         Baraja baraja = new Baraja();
+        System.out.println("Servidor BlackJack en ejecución, esperando jugadores");
         
-        Juego[] jugadores = new Juego[8];
+        
+        //1. ESPERAR A QUE SE CONECTEN n<8 JUGADORES
+        //CUANDO SE HAYAN CONECTADO 8 JUGADORES, O CUANDO ELIJAS TU (CON UN MENU), INICIAR PARTIDA
+       
+        int numjug=8;//AQUI HAY Q CONTAR EL NUM DE JUGADORES
+        Juego[] jugadores = new Juego[numjug];
 
-        System.out.println("El jugador se ha conectado");
+        
         ExecutorService pool = Executors.newFixedThreadPool(500);
         try (ServerSocket listener = new ServerSocket(59002)) {
 
@@ -34,6 +40,7 @@ public class Servidor {
                 carta1=baraja.sacarCarta();
                 carta2=baraja.sacarCarta();
                 jugadores[i] = new Juego(carta1,carta2);
+                //mandar al cliente
             }
             while (true) {
                 pool.execute(new Handler(listener.accept()));
