@@ -4,6 +4,9 @@
  */
 package FinalPack;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 /**
  *
  * @author alumno
@@ -14,7 +17,9 @@ public class Servidor {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        System.out.println("Servidor BlackJack en ejecucion");
+        System.out.println("Esperando Jugadores: 2 restantes");
+        ExecutorService pool=new Executors.newFixedThreadPool(400);
     }
     
 }
