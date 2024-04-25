@@ -34,7 +34,7 @@ public class Servidor {
                 System.out.println("Jugador "+(i+1)+" conectado, "+(numjug-i-1)+" restantes");
                 //Thread jug=new Thread(new Handler(socket, baraja));
                 //jug.start();
-                //pool.execute(new Handler(listener.accept()));
+                pool.execute(new Handler(socket, baraja));
                 
             }
 
