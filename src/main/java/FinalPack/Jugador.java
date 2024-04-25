@@ -32,6 +32,10 @@ public class Jugador {
             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream()) ;
             BufferedReader teclado = new BufferedReader(new InputStreamReader(System.in));
             
+            while(true){
+                
+            }
+            
     }catch(IOException e){
         System.err.println(e.getMessage());
             e.printStackTrace(System.err);
