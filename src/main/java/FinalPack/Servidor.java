@@ -21,8 +21,7 @@ public class Servidor {
 
         Baraja baraja = new Baraja();
         
-        List<Juego> jugadores = new ArrayList<>();
-        jugadores.
+        Juego[] jugadores = new Juego[8];
 
         System.out.println("El jugador se ha conectado");
         ExecutorService pool = Executors.newFixedThreadPool(500);
@@ -31,7 +30,7 @@ public class Servidor {
             Carta carta1;
             Carta carta2;
             
-            for(int i = 0;i<jugadores.size();i++){
+            for(int i = 0;i<jugadores.length;i++){
                 carta1=baraja.sacarCarta();
                 carta2=baraja.sacarCarta();
                 jugadores[i] = new Juego(carta1,carta2);
