@@ -43,12 +43,25 @@ public class Jugador {
             Juego mano = (Juego) ois.readObject();
             System.out.println("MANO: " + mano);
             System.out.println("VALOR: " + mano.getPuntuacion());
+            String decision = "";
+            while (true) {
+                if (decision.equals("B")) {
+                    System.out.println("Te has plantado con una puntuacion de "+mano.getPuntuacion());
+                    break;
+                } else {
+                    System.out.println("Escoja una opcion:");
+                    System.out.println("A: Pedir otra carta");
+                    System.out.println("B: Plantarse");
+                    decision = teclado.readLine().toUpperCase();
+                    //AVISAR AL HANDLER (no hace falta mandarle A)***
+                    
+                    //ESPERAR RESPUESTA HANDLER
+                    Juego manon=(Juego)ois.readObject();
+                    System.out.println("MANO: "+manon);
+                    System.out.println("VALOR: " + mano.getPuntuacion());
+                }
 
-            System.out.println("Escoja una opcion:");
-            System.out.println("A: Pedir otra carta");
-            System.out.println("B: Plantarse");
-            String decision = teclado.readLine().toUpperCase();
-            salidaSocket.println(decision);
+            }
 
         } catch (IOException | ClassNotFoundException e) {
             System.err.println(e.getMessage());

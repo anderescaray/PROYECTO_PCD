@@ -30,12 +30,10 @@ public class Handler implements Runnable {
             oos.writeObject(mano);
 
             //Ahora esperamos la respuesta del jugador
-            BufferedReader br = new BufferedReader(new InputStreamReader(conexion.getInputStream()));
-            String decision = (String) br.readLine();
-            if (decision.equals("Pedir")) {
-                //Carta c3=baraja.sacarCarta();
-            } else if (decision.equals("Plantarse")) {
-                
+            while (true) {
+                //RECIBIR AVISO DEL JUGADOR***
+                mano.pedirCarta(baraja.sacarCarta());
+                oos.writeObject((mano));
             }
 
         } catch (IOException e) {
