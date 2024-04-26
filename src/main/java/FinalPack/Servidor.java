@@ -52,6 +52,7 @@ public class Servidor {
             for (int i = 0; i < numjug; i++) {
                 pool.execute(new Handler(listaSockets[i], baraja));
             }
+            pool.shutdown();
             //Faltaria ver que pasa si se ejecutan mas de 8 jugadores (deberia funcionar bien, y solo usar los 8 primeros)
 
         } catch (IOException e) {

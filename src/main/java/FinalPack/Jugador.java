@@ -40,10 +40,11 @@ public class Jugador {
 
             System.out.println("Atento, comienza la partida");
             System.out.println("");
-            Juego mano = (Juego) ois.readObject();
+            Juego mano = (Juego) ois.readObject(); // Lee la mano que manda el handler
             System.out.println("MANO: " + mano);
             System.out.println("VALOR: " + mano.getPuntuacion());
             String decision = "";
+
             while (true) {
                 if (decision.equals("B")) {
                     System.out.println("Te has plantado con una puntuacion de " + mano.getPuntuacion());
@@ -53,13 +54,16 @@ public class Jugador {
                     System.out.println("A: Pedir otra carta");
                     System.out.println("B: Plantarse");
                     decision = teclado.readLine().toUpperCase();
-                    
-                    salidaSocket.println(decision);
+
+                    salidaSocket.println(decision); // manda la decision al handler
 
                     //ESPERAR RESPUESTA HANDLER
-                    Juego manon = (Juego) ois.readObject();
-                    System.out.println("MANO: " + manon);
-                    System.out.println("VALOR: " + manon.getPuntuacion());
+                    if (decision.equals("A")) {
+                        Juego manon = (Juego) ois.readObject();
+                        System.out.println("MANO: " + manon);
+                        System.out.println("VALOR: " + manon.getPuntuacion());
+                    }
+
                 }
 
             }

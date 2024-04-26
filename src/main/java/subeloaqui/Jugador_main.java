@@ -9,7 +9,7 @@ import javax.swing.JFrame;
 public class Jugador_main {
 
     public static void main(String[] args) {
-        Jugador jugador = new Jugador("172.18.83.14"); // Hay que poner el puerto de cada ordenador para que vaya
+        Jugador jugador = new Jugador("172.18.83.19"); // Hay que poner el puerto de cada ordenador para que vaya
 
         jugador.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jugador.runClient(); 
