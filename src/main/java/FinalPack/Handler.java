@@ -38,9 +38,9 @@ public class Handler implements Runnable {
 
             while (true) {
                 String signal = signalReader.readLine();
-                System.out.println("HOLA");//Se queda esperando la señal
-                mano.pedirCarta(baraja.sacarCarta());//ESTO ES LO QUE NO VA
-                oos.writeObject(mano);
+                mano.pedirCarta(baraja.sacarCarta());
+                
+                oos.writeObject(mano);//AQUI NO FUNCIONA
             }
 
         } catch (IOException e) {

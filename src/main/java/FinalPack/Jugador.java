@@ -55,9 +55,10 @@ public class Jugador {
                     System.out.println("B: Plantarse");
                     decision = teclado.readLine().toUpperCase();
 
-                    if (decision.equals("A")) {
+                    if (!decision.equals("B")) {
                         salidaSocket.println(decision);
-                        Juego manon = (Juego) ois.readObject();
+                        
+                        Juego manon = (Juego) ois.readObject();//AQUI NO FUNCIONA 
                         System.out.println("MANO: " + manon);
                         System.out.println("VALOR: " + manon.getPuntuacion());
                     }
