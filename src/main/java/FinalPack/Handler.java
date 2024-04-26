@@ -37,17 +37,10 @@ public class Handler implements Runnable {
             BufferedReader signalReader = new BufferedReader(new InputStreamReader(conexion.getInputStream()));
 
             while (true) {
-                String signal = signalReader.readLine();//Se queda esperando la señal A o B
-
-                if ("A".equals(signal)) {
-                    mano.pedirCarta(baraja.sacarCarta());
-                    oos.writeObject(mano);
-                } else if ("B".equals(signal)) {
-                    //No hace nada y deja que en el while true de Jugador llegue al break
-                } else {
-                    //Opcion no valida
-                }
-
+                String signal = signalReader.readLine();
+                System.out.println("HOLA");//Se queda esperando la señal
+                mano.pedirCarta(baraja.sacarCarta());//ESTO ES LO QUE NO VA
+                oos.writeObject(mano);
             }
 
         } catch (IOException e) {
