@@ -46,19 +46,20 @@ public class Jugador {
             String decision = "";
             while (true) {
                 if (decision.equals("B")) {
-                    System.out.println("Te has plantado con una puntuacion de "+mano.getPuntuacion());
+                    System.out.println("Te has plantado con una puntuacion de " + mano.getPuntuacion());
                     break;
                 } else {
                     System.out.println("Escoja una opcion:");
                     System.out.println("A: Pedir otra carta");
                     System.out.println("B: Plantarse");
                     decision = teclado.readLine().toUpperCase();
-                    //AVISAR AL HANDLER (no hace falta mandarle A)***
                     
+                    salidaSocket.println(decision);
+
                     //ESPERAR RESPUESTA HANDLER
-                    Juego manon=(Juego)ois.readObject();
-                    System.out.println("MANO: "+manon);
-                    System.out.println("VALOR: " + mano.getPuntuacion());
+                    Juego manon = (Juego) ois.readObject();
+                    System.out.println("MANO: " + manon);
+                    System.out.println("VALOR: " + manon.getPuntuacion());
                 }
 
             }

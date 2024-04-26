@@ -30,10 +30,13 @@ public class Handler implements Runnable {
             oos.writeObject(mano);
 
             //Ahora esperamos la respuesta del jugador
+            BufferedReader signalReader = new BufferedReader(new InputStreamReader(conexion.getInputStream()));
+
             while (true) {
-                //RECIBIR AVISO DEL JUGADOR***
-                mano.pedirCarta(baraja.sacarCarta());
-                oos.writeObject((mano));
+                String signal = signalReader.readLine();//Se queda esperando la señal de pedir carta
+                mano.pedirCarta(baraja.sacarCarta());//NO FUNCIONA PQ SIEMPRE MANDA LA MISMA
+                oos.writeObject(mano);
+
             }
 
         } catch (IOException e) {
