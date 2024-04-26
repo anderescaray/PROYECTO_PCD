@@ -32,6 +32,7 @@ public class Handler implements Runnable {
             Carta c2 = baraja.sacarCarta();
             Juego mano = new Juego(c1, c2);
             oos.writeObject(mano);
+            oos.reset();
 
             //Ahora esperamos la respuesta del jugador
             BufferedReader signalReader = new BufferedReader(new InputStreamReader(conexion.getInputStream()));
@@ -40,7 +41,8 @@ public class Handler implements Runnable {
                 String signal = signalReader.readLine();
                 mano.pedirCarta(baraja.sacarCarta());
                 
-                oos.writeObject(mano);//AQUI NO FUNCIONA
+                oos.writeObject(mano);
+                oos.reset();
             }
 
         } catch (IOException e) {

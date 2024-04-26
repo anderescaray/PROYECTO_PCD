@@ -58,7 +58,7 @@ public class Jugador {
                     if (!decision.equals("B")) {
                         salidaSocket.println(decision);
                         
-                        Juego manon = (Juego) ois.readObject();//AQUI NO FUNCIONA 
+                        Juego manon = (Juego) ois.readObject();
                         System.out.println("MANO: " + manon);
                         System.out.println("VALOR: " + manon.getPuntuacion());
                     }
