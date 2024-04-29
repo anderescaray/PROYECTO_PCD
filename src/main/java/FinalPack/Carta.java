@@ -1,6 +1,7 @@
 package FinalPack;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  *
@@ -34,6 +35,22 @@ public class Carta implements Serializable {
     @Override
     public String toString() {
         return valor + " de " + String.valueOf(palo).toLowerCase();
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Carta other = (Carta) obj;
+        if (!Objects.equals(this.valor, other.valor)) {
+            return false;
+        }
+        return this.palo == other.palo;
     }
     
     

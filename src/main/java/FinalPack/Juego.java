@@ -6,6 +6,7 @@ package FinalPack;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  *
@@ -112,4 +113,24 @@ public class Juego implements Serializable {
         return frase.substring(0,frase.length()-2);
         
     }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Juego other = (Juego) obj;
+        if (this.puntuacion != other.puntuacion) {
+            return false;
+        }
+        if (!Objects.equals(this.cartas, other.cartas)) {
+            return false;
+        }
+        return Objects.equals(this.ases, other.ases);
+    }
+    
 }
