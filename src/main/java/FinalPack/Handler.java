@@ -47,11 +47,11 @@ public class Handler implements Runnable {
                     System.out.println("El jugador se ha plantado con " + mano + " y puntuación " + mano.getPuntuacion());
                     break;
                 } else if (signal.equalsIgnoreCase("A")) {
-                    System.out.println("MANO INICIAL " + mano);
+                    System.out.println("MANO INICIAL " + mano+" con puntuación "+mano.getPuntuacion());
                     mano.pedirCarta(baraja.sacarCarta());
                     oos.writeObject(mano);
                     oos.reset();
-                    System.out.println("Nueva mano " + mano);
+                    System.out.println("Nueva mano " + mano+" con puntuación "+mano.getPuntuacion() );
                     if (mano.getPuntuacion() > 21) {
                         System.out.println("El jugador ha superado 21 puntos y pierde");
                         break;
@@ -59,6 +59,9 @@ public class Handler implements Runnable {
                         System.out.println("El jugador tiene Blackjack " + mano);
                         break;
                     }
+                }else{
+                    System.out.println("El jugador tiene Blackjack " + mano);
+                        break;
                 }
 
                 //mano.pedirCarta(baraja.sacarCarta());
@@ -68,11 +71,16 @@ public class Handler implements Runnable {
             Servidor.AddResultado(mano);
             while (resultados.size() != Servidor.getNumjug()) {
                 System.out.println("Esperando a que los demas jugadores acaben la partida");
-                Thread.sleep(5000);
+                Thread.sleep(10000);
             }
             Juego ganador = calcularGanador();
-            System.out.println("El ganador es el jugador con "+ganador+" con puntuación "+ganador.getPuntuacion());
+            //System.out.println("El ganador es el jugador con "+ganador+" con puntuación "+ganador.getPuntuacion());
             oos.writeObject(ganador);
+            
+            if(ganador.equals(mano)){
+                System.out.println("El ganador es el jugador con "+ganador+" con puntuación "+ganador.getPuntuacion());
+                
+            }
             //Juego ganador = (Juego)ois.readObject();
             //System.out.println("El ganador es el jugador con la mano "+  ganador+" con puntuacion "+ganador.getPuntuacion());
 

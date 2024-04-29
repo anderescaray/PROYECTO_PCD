@@ -43,6 +43,15 @@ public class Servidor {
     public synchronized static void AddResultado(Juego mano) {
         resultados.add(mano);
     }
+    private static Juego calcularGanador() {
+        Juego ganador = resultados.get(0);
+        for (Juego juego : resultados) {
+            if (ganador.getPuntuacion() < juego.getPuntuacion()&& juego.getPuntuacion()<=21) {
+                ganador = juego;
+            }
+        }
+        return ganador;
+    }
 
     public static void main(String[] args) {
 
@@ -81,6 +90,9 @@ public class Servidor {
                 pool.execute(new Handler(clientSockets.get(i), baraja));
             }
             pool.shutdown();
+
+
+            
             //Faltaria ver que pasa si se ejecutan mas de 8 jugadores (deberia funcionar bien, y solo usar los 8 primeros)
 
         } catch (IOException e) {

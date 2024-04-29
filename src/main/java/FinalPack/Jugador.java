@@ -93,11 +93,12 @@ public class Jugador {
 
                 }*/
             }
-            Juego resultado = (Juego)ois.readObject();
-            if(mano.equals(resultado)){
+            Juego resultado = (Juego) ois.readObject();
+            if (mano.equals(resultado)) {
                 System.out.println("Has ganado");
-                
-            }else{
+
+
+            } else {
                 System.out.println("Has perdido");
             }
 //            oos.writeObject(mano);
