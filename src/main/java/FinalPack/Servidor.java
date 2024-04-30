@@ -88,7 +88,7 @@ public class Servidor {
             }
             System.out.println("La partida va a comenzar");
             for (int i = 0; i < numjug; i++) {
-                pool.execute(new Handler(clientSockets.get(i), baraja, i));
+                pool.execute(new Handler(clientSockets.get(i), baraja, i+1));
             }
             pool.shutdown();
 

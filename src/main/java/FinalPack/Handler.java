@@ -45,23 +45,23 @@ public class Handler implements Runnable {
             while (((signal = signalReader.readLine()) != null)) {
                 //String signal = signalReader.readLine();
                 if (signal.equalsIgnoreCase("B")) {
-                    System.out.println("El jugador " + id + "  se ha plantado con " + mano + " y puntuación " + mano.getPuntuacion());
+                    System.out.println("JUGADOR " + id + ": Se ha plantado con: " + mano + " Y puntuación: " + mano.getPuntuacion());
                     break;
                 } else if (signal.equalsIgnoreCase("A")) {
-                    System.out.println("MANO INICIAL " + mano + " con puntuación " + mano.getPuntuacion());
+                    System.out.println("JUGADOR " + id + ": Mano inicial: " + mano + " Y puntuación: " + mano.getPuntuacion());
                     mano.pedirCarta(baraja.sacarCarta());
                     oos.writeObject(mano);
                     oos.reset();
-                    System.out.println("Nueva mano " + mano + " con puntuación " + mano.getPuntuacion());
+                    System.out.println("JUGADOR " + id + ": Nueva mano: " + mano + " Y puntuación: " + mano.getPuntuacion());
                     if (mano.comprobarSobrepasada()) {
-                        System.out.println("El jugador " + id + " ha superado 21 puntos y pierde");
+                        System.out.println("JUGADOR " + id + ": Ha superado 21 puntos y pierde");
                         break;
                     } else if (mano.getPuntuacion() == 21) {
-                        System.out.println("El jugador " + id + "  tiene Blackjack " + mano);
+                        System.out.println("JUGADOR " + id + ":  Tiene Blackjack: " + mano);
                         break;
                     }
                 } else {
-                    System.out.println("El jugador " + id + "  tiene Blackjack " + mano);
+                    System.out.println("JUGADOR " + id + ": Tiene Blackjack: " + mano);
                     break;
                 }
 
