@@ -39,8 +39,7 @@ public class Jugador {
 
             while (true) {
                 if (mano.getPuntuacion() == 21) {
-                    System.out.println("BlackJack");
-                    System.out.println("(Pulsa enter para finalizar)");
+                    System.out.println("BLACKJACK   (Pulsa Intro para finalizar)");
                     decision = teclado.readLine().toUpperCase();
                     salidaSocket.println(decision);
                     break;
@@ -66,8 +65,7 @@ public class Jugador {
                     System.out.println("Has superado el limite 21");
                     break;
                 } else if (mano.getPuntuacion() == 21) {
-                    System.out.println("BlackJack");
-                    System.out.println("(Pulsa enter para finalizar)");
+                    System.out.println("BLACKJACK   (Pulsa Intro para finalizar)");
                     break;
                 }
             }
