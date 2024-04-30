@@ -109,7 +109,7 @@ public class Juego implements Serializable {
             frase = frase  + e+ ", ";
         }
         for (Carta a : ases) {
-            frase = frase + a;
+            frase = frase + a+", ";
         }
         return frase.substring(0,frase.length()-2);
         

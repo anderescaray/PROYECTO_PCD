@@ -68,7 +68,7 @@ public class Handler implements Runnable {
             Servidor.AddResultado(mano); //añadimos la mano al array
             while (resultados.size() != Servidor.getNumjug()) {
                 System.out.println("Esperando a que los demas jugadores acaben la partida");
-                Thread.sleep(5000);
+                Thread.sleep(20000);
             }//Esperamos a que todos terminen, es decir que todos hayan añadido una mano al array
             Juego ganador = calcularGanador(); //determinamos el ganador 
 
