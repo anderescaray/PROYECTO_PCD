@@ -39,7 +39,7 @@ public class Jugador {
 
             while (true) {
                 if (mano.getPuntuacion() == 21) {
-                    System.out.println("BLACKJACK   de primeras");
+                    System.out.println("BLACKJACK");
                     salidaSocket.println("BLCKJCK");
                     break;
                 }
@@ -62,7 +62,7 @@ public class Jugador {
                 System.out.println("Puntuacion actual: " + mano.getPuntuacion());
 
                 if (mano.getPuntuacion() > 21) {
-                    System.out.println("Has superado el limite 21");
+                    System.out.println("Has superado el limite y has perdido");
                     System.out.println("Espera a los demas jugadores");
                     break;
                 } else if (mano.getPuntuacion() == 21) {
@@ -73,11 +73,11 @@ public class Jugador {
             }
             Juego resultado = (Juego) ois.readObject();
             if (mano.getPuntuacion() > 21) {
-                System.out.println("Has perdido");
+                System.out.println("DERROTA");
             } else if (mano.equals(resultado)) {
-                System.out.println("Has ganado");
+                System.out.println("VICTORIA");
             } else {
-                System.out.println("Has perdido");
+                System.out.println("DERROTA");
             }
 
         } catch (IOException | ClassNotFoundException e) {
