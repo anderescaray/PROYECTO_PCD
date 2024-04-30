@@ -79,7 +79,10 @@ public class Handler implements Runnable {
             oos.writeObject(ganador);
 
             if (ganador.equals(mano)) {
-                System.out.println("El ganador es el jugador " + id + "  con " + ganador + " con puntuación " + ganador.getPuntuacion());
+                System.out.println("");
+                System.out.println("");
+                System.out.println("FIN DE LA PARTIDA");
+                System.out.println("GANADOR: Jugador " + id + " Mano: " + ganador + " Y puntuación: " + ganador.getPuntuacion());
 
             }
             //Juego ganador = (Juego)ois.readObject();
