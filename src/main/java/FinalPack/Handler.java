@@ -41,7 +41,7 @@ public class Handler implements Runnable {
             //Ahora esperamos la respuesta del jugador
             BufferedReader signalReader = new BufferedReader(new InputStreamReader(conexion.getInputStream()));
             String signal;
-            while (((signal = signalReader.readLine()) != "BLCKJCK")) { //Leemos la respuesta del jugador, hasta que hagamos un break o haya blackjack
+            while ((!"BLCKJCK".equals(signal = signalReader.readLine()))) { //Leemos la respuesta del jugador, hasta que hagamos un break o haya blackjack
                 if (signal.equalsIgnoreCase("B")) {
                     System.out.println("JUGADOR " + id + ": Se ha plantado con: " + mano + " Y puntuación: " + mano.getPuntuacion());
                     break;
@@ -63,7 +63,7 @@ public class Handler implements Runnable {
                     break;
                 }
             }
-            
+
             //Por ultimo debemos determinar el ganador
             Servidor.AddResultado(mano); //añadimos la mano al array
             while (resultados.size() != Servidor.getNumjug()) {
@@ -88,8 +88,6 @@ public class Handler implements Runnable {
                     System.out.println("Mano: " + ganador + " / Puntuación: " + ganador.getPuntuacion());
                 }
             }
-
-
         } catch (IOException | InterruptedException e) {
             System.err.println("Error al manejar la conexión con el cliente: " + e.getMessage());
             e.printStackTrace(System.err);
@@ -107,11 +105,11 @@ public class Handler implements Runnable {
             } catch (IOException e) {
                 System.err.println(e.getMessage());
                 e.printStackTrace(System.err);
-            } 
+            }
         }
     }
 
-    //Mencionar, que en caso de empate, ganará el jugador que antes haya logrado la mano, ya que se valora como criterio de desempate conseguir la puntuacion con mayor rapidez.
+    // Mencionar, que en caso de empate, ganará el jugador que antes haya logrado la mano, ya que se valora como criterio de desempate conseguir la puntuacion con mayor rapidez.
     private Juego calcularGanador() {
         Juego ganador = resultados.get(0);
         for (Juego juego : resultados) {

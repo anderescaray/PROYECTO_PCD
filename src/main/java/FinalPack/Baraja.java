@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class Baraja {
+
     private List<Carta> cartas;
 
     public Baraja() {

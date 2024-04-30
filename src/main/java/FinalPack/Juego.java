@@ -106,15 +106,14 @@ public class Juego implements Serializable {
     public String toString() {
         String frase = "";
         for (Carta e : cartas) {
-            frase = frase  + e+ ", ";
+            frase = frase + e + ", ";
         }
         for (Carta a : ases) {
-            frase = frase + a+", ";
+            frase = frase + a + ", ";
         }
-        return frase.substring(0,frase.length()-2);
-        
-    }
+        return frase.substring(0, frase.length() - 2);
 
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -133,5 +132,5 @@ public class Juego implements Serializable {
         }
         return Objects.equals(this.ases, other.ases);
     }
-    
+
 }

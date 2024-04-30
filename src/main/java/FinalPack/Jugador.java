@@ -26,11 +26,18 @@ public class Jugador {
      */
     public static void main(String[] args) {
         System.out.println("Conectado, esperando al resto de jugadores...");
-        try (Socket socket = new Socket(SERVER_ADRESS, SERVER_PORT); ObjectInputStream ois = new ObjectInputStream(socket.getInputStream()); ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream()); PrintWriter salidaSocket = new PrintWriter(socket.getOutputStream(), true); BufferedReader teclado = new BufferedReader(new InputStreamReader(System.in))) {
+        try (Socket socket = new Socket(SERVER_ADRESS, SERVER_PORT); // Socket para conectar con el servidor
+                ObjectInputStream ois = new ObjectInputStream(socket.getInputStream()); // Para leer objetos que envíe el servidor (desde handler)
+                ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream()); // Para enviar objetos al servidor
+                PrintWriter salidaSocket = new PrintWriter(socket.getOutputStream(), true); // Para enviar texto al servidor
+                BufferedReader teclado = new BufferedReader(new InputStreamReader(System.in))) // Para leer desde el teclado al usuario
+        // Usamos try-with-resources para que los recursos se cierren solos al acabar el bloque try
+        { 
 
             System.out.println("Atento, comienza la partida...");
             System.out.println("");
 
+            // Leemos la mano que se envía desde Handler y mostramos su información
             Juego mano = (Juego) ois.readObject();
             System.out.println("MANO: " + mano);
             System.out.println("VALOR: " + mano.getPuntuacion());
@@ -38,43 +45,50 @@ public class Jugador {
             String decision;
 
             while (true) {
-                if (mano.getPuntuacion() == 21) {
+                if (mano.getPuntuacion() == 21) { // Si tiene blackjack finalizamos el bucle
                     System.out.println("BLACKJACK");
                     salidaSocket.println("BLCKJCK");
                     break;
                 }
-                System.out.println("Escoja una opcion:");
+                System.out.println("Escoja una opción:");
                 System.out.println("A: Pedir otra carta");
                 System.out.println("B: Plantarse");
                 decision = teclado.readLine().toUpperCase();
 
+            // El usuario elige una opción y enviamos al Handler la decisión
                 salidaSocket.println(decision);
 
-                if (decision.equals("B")) {
-                    System.out.println("Te has plantado con una puntuacion de " + mano.getPuntuacion());
-                    System.out.println("Espera a los demas jugadores");
+                if (decision.equals("B")) { // Si se ha plantado paramos el bucle
+                    System.out.println("Te has plantado con una puntuación de " + mano.getPuntuacion());
+                    System.out.println("Espera a los demás jugadores");
                     break;
                 }
+            // En caso de que haya pedido otra carta
+            // leemos la mano modificada, con una carta más, enviada desde Handler 
                 mano = (Juego) ois.readObject();
                 System.out.println("");
                 System.out.println("");
                 System.out.println("Mano actual: " + mano);
-                System.out.println("Puntuacion actual: " + mano.getPuntuacion());
+                System.out.println("Puntuación actual: " + mano.getPuntuacion());
 
-                if (mano.getPuntuacion() > 21) {
-                    System.out.println("Has superado el limite y has perdido");
-                    System.out.println("Espera a los demas jugadores");
+                // Si se ha sobrepasado o tiene blackjack cortamos el bucle
+                // sino volverá a tener que decidir el jugador
+                if (mano.comprobarSobrepasada()) { 
+                    System.out.println("Has superado el límite y has perdido");
+                    System.out.println("Espera a los demás jugadores");
                     break;
                 } else if (mano.getPuntuacion() == 21) {
                     System.out.println("BLACKJACK");
-                    System.out.println("Espera a los demas jugadores");
+                    System.out.println("Espera a los demás jugadores");
                     break;
                 }
             }
+            
+            // Leemos la mano ganadora calculada en Handler   
             Juego resultado = (Juego) ois.readObject();
-            if (mano.getPuntuacion() > 21) {
+            if (mano.comprobarSobrepasada()) { // Por si todos los jugadores se sobrepasan
                 System.out.println("DERROTA");
-            } else if (mano.equals(resultado)) {
+            } else if (mano.equals(resultado)) { // Si es la misma mano que la del jugador es que ha ganado
                 System.out.println("VICTORIA");
             } else {
                 System.out.println("DERROTA");
