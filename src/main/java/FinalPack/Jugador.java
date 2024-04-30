@@ -45,11 +45,12 @@ public class Jugador {
             String decision;
 
             while (true) {
-                if (mano.getPuntuacion() == 21) { // Si tiene blackjack finalizamos el bucle
+                if (mano.getPuntuacion() == 21) { // Si tiene blackjack en el primer reparto finalizamos el bucle
                     System.out.println("BLACKJACK");
                     salidaSocket.println("BLCKJCK");
                     break;
                 }
+                //Si no tiene blackjack, toma una decision constantemente.
                 System.out.println("Escoja una opción:");
                 System.out.println("A: Pedir otra carta");
                 System.out.println("B: Plantarse");
@@ -71,7 +72,7 @@ public class Jugador {
                 System.out.println("Mano actual: " + mano);
                 System.out.println("Puntuación actual: " + mano.getPuntuacion());
 
-                // Si se ha sobrepasado o tiene blackjack cortamos el bucle
+                // Con la nueva mano, si se ha sobrepasado o tiene blackjack cortamos el bucle
                 // sino volverá a tener que decidir el jugador
                 if (mano.comprobarSobrepasada()) { 
                     System.out.println("Has superado el límite y has perdido");
@@ -86,12 +87,12 @@ public class Jugador {
             
             // Leemos la mano ganadora calculada en Handler   
             Juego resultado = (Juego) ois.readObject();
-            if (mano.comprobarSobrepasada()) { // Por si todos los jugadores se sobrepasan
+            if (mano.comprobarSobrepasada()) { // Por si todos los jugadores se sobrepasan, para evitar falsos ganadores
                 System.out.println("DERROTA");
             } else if (mano.equals(resultado)) { // Si es la misma mano que la del jugador es que ha ganado
                 System.out.println("VICTORIA");
             } else {
-                System.out.println("DERROTA");
+                System.out.println("DERROTA"); //Sino, la mano ganadora será la de otro jugador por tanto no habra ganado
             }
 
         } catch (IOException | ClassNotFoundException e) {

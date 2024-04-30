@@ -74,6 +74,10 @@ public class Handler implements Runnable {
 
             oos.writeObject(ganador); //devolvemos la mano ganadora a cada jugador
 
+            
+            //Si todos los jugadores se pasasen, la funcion calcularGanador() nos devolveria la mano del ultimo jugador, pese a no ser ganador
+            //En lugar de hacer un return null, preferimos verificar ahora si el ganador devuelto es correcto o no.
+            //Para ello debemos verificar que cumpla efectivamente con puntuacion<21
             if (ganador.equals(mano)) { //Mostramos el resultado final de la partida en el servidor
                 if (ganador.getPuntuacion() > 21) {
                     System.out.println("");
