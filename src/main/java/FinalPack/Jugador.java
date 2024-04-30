@@ -59,7 +59,7 @@ public class Jugador {
                 System.out.println("");
                 System.out.println("");
                 System.out.println("Mano actual: " + mano);
-                System.out.println("Puntuacion actual " + mano.getPuntuacion());
+                System.out.println("Puntuacion actual: " + mano.getPuntuacion());
 
                 if (mano.getPuntuacion() > 21) {
                     System.out.println("Has superado el limite 21");
