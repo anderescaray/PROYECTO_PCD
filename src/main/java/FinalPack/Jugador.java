@@ -28,7 +28,7 @@ public class Jugador {
         System.out.println("Conectado, esperando al resto de jugadores...");
         try (Socket socket = new Socket(SERVER_ADRESS, SERVER_PORT); ObjectInputStream ois = new ObjectInputStream(socket.getInputStream()); ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream()); PrintWriter salidaSocket = new PrintWriter(socket.getOutputStream(), true); BufferedReader teclado = new BufferedReader(new InputStreamReader(System.in))) {
 
-            System.out.println("Atento, comienza la partida");
+            System.out.println("Atento, comienza la partida...");
             System.out.println("");
 
             Juego mano = (Juego) ois.readObject();
