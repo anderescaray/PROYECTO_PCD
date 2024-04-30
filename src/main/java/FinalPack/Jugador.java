@@ -39,9 +39,8 @@ public class Jugador {
 
             while (true) {
                 if (mano.getPuntuacion() == 21) {
-                    System.out.println("BLACKJACK   (Pulsa Intro para finalizar)");
-                    decision = teclado.readLine().toUpperCase();
-                    salidaSocket.println(decision);
+                    System.out.println("BLACKJACK   de primeras");
+                    salidaSocket.println("BLCKJCK");
                     break;
                 }
                 System.out.println("Escoja una opcion:");
@@ -53,6 +52,7 @@ public class Jugador {
 
                 if (decision.equals("B")) {
                     System.out.println("Te has plantado con una puntuacion de " + mano.getPuntuacion());
+                    System.out.println("Espera a los demas jugadores");
                     break;
                 }
                 mano = (Juego) ois.readObject();
@@ -63,9 +63,11 @@ public class Jugador {
 
                 if (mano.getPuntuacion() > 21) {
                     System.out.println("Has superado el limite 21");
+                    System.out.println("Espera a los demas jugadores");
                     break;
                 } else if (mano.getPuntuacion() == 21) {
-                    System.out.println("BLACKJACK   (Pulsa Intro para finalizar)");
+                    System.out.println("BLACKJACK");
+                    System.out.println("Espera a los demas jugadores");
                     break;
                 }
             }

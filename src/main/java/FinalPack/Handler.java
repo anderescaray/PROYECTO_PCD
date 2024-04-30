@@ -41,7 +41,7 @@ public class Handler implements Runnable {
             //Ahora esperamos la respuesta del jugador
             BufferedReader signalReader = new BufferedReader(new InputStreamReader(conexion.getInputStream()));
             String signal;
-            while (((signal = signalReader.readLine()) != null)) { //Leemos la respuesta del jugador, hasta que hagamos un break o haya blackjack
+            while (((signal = signalReader.readLine()) != "BLCKJCK")) { //Leemos la respuesta del jugador, hasta que hagamos un break o haya blackjack
                 if (signal.equalsIgnoreCase("B")) {
                     System.out.println("JUGADOR " + id + ": Se ha plantado con: " + mano + " Y puntuación: " + mano.getPuntuacion());
                     break;
