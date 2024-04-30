@@ -44,16 +44,6 @@ public class Servidor {
         resultados.add(mano);
     }
 
-    private static Juego calcularGanador() {
-        Juego ganador = resultados.get(0);
-        for (Juego juego : resultados) {
-            if (ganador.getPuntuacion() < juego.getPuntuacion() && juego.getPuntuacion() <= 21) {
-                ganador = juego;
-            }
-        }
-        return ganador;
-    }
-
     public static void main(String[] args) {
 
         BufferedReader teclado = new BufferedReader(new InputStreamReader(System.in));
