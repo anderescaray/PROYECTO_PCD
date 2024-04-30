@@ -57,7 +57,7 @@ public class Handler implements Runnable {
                         System.out.println("JUGADOR " + id + ": Ha superado 21 puntos y pierde");
                         break;
                     } else if (mano.getPuntuacion() == 21) {
-                        System.out.println("JUGADOR " + id + ":  Tiene Blackjack: " + mano);
+                        System.out.println("JUGADOR " + id + ": Tiene Blackjack: " + mano);
                         break;
                     }
                 } else {
@@ -72,21 +72,27 @@ public class Handler implements Runnable {
             Servidor.AddResultado(mano);
             while (resultados.size() != Servidor.getNumjug()) {
                 System.out.println("Esperando a que los demas jugadores acaben la partida");
-                Thread.sleep(10000);
+                Thread.sleep(5000);
             }
             Juego ganador = calcularGanador();
-            //System.out.println("El ganador es el jugador con "+ganador+" con puntuación "+ganador.getPuntuacion());
+
             oos.writeObject(ganador);
 
             if (ganador.equals(mano)) {
-                System.out.println("");
-                System.out.println("");
-                System.out.println("FIN DE LA PARTIDA");
-                System.out.println("GANADOR: Jugador " + id + " Mano: " + ganador + " Y puntuación: " + ganador.getPuntuacion());
-
+                if (ganador.getPuntuacion() > 21) {
+                    System.out.println("");
+                    System.out.println("");
+                    System.out.println("FIN DE LA PARTIDA");
+                    System.out.println("NO HAY GANADOR");
+                } else {
+                    System.out.println("");
+                    System.out.println("");
+                    System.out.println("FIN DE LA PARTIDA");
+                    System.out.println("GANADOR: Jugador " + id);
+                    System.out.println("Mano: " + ganador + " / Puntuación: " + ganador.getPuntuacion());
+                }
             }
-            //Juego ganador = (Juego)ois.readObject();
-            //System.out.println("El ganador es el jugador con la mano "+  ganador+" con puntuacion "+ganador.getPuntuacion());
+
 
         } catch (IOException | InterruptedException e) {
             System.err.println("Error al manejar la conexión con el cliente: " + e.getMessage());
@@ -106,27 +112,16 @@ public class Handler implements Runnable {
                 System.err.println(e.getMessage());
                 e.printStackTrace(System.err);
             }
-            /*} finally {
-            try {
-                ois = new ObjectInputStream(conexion.getInputStream()) ;
-                Juego mano = (Juego) ois.readObject();
-                System.out.println("La mano del "+Thread.currentThread().getName()+ " es "+ mano);
-                conexion.close();
-            } catch (IOException | ClassNotFoundException e) {
-                System.err.println(e.getMessage());
-                e.printStackTrace(System.err);
-
-            }*/
+            
         }
     }
 
     private Juego calcularGanador() {
         Juego ganador = resultados.get(0);
         for (Juego juego : resultados) {
-            if(ganador.getPuntuacion()>21){
+            if (ganador.getPuntuacion() > 21) {
                 ganador = juego;
-            }
-            else if (ganador.getPuntuacion() < juego.getPuntuacion() && juego.getPuntuacion() <= 21) {
+            } else if (ganador.getPuntuacion() < juego.getPuntuacion() && juego.getPuntuacion() <= 21) {
                 ganador = juego;
             }
         }

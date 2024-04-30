@@ -60,6 +60,8 @@ public class Jugador {
                     break;
                 }
                 mano = (Juego) ois.readObject();
+                System.out.println("");
+                System.out.println("");
                 System.out.println("Mano actual: " + mano);
                 System.out.println("Puntuacion actual " + mano.getPuntuacion());
 
@@ -94,7 +96,11 @@ public class Jugador {
                 }*/
             }
             Juego resultado = (Juego) ois.readObject();
-            if (mano.equals(resultado)) {
+            if(mano.getPuntuacion()>21){
+                System.out.println("Has perdido");
+            }
+            else if (mano.equals(resultado)) {
+                
                 System.out.println("Has ganado");
 
 
