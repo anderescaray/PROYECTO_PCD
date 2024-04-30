@@ -64,7 +64,7 @@ public class Jugador {
                 System.out.println("Puntuacion actual " + mano.getPuntuacion());
 
                 if (mano.getPuntuacion() > 21) {
-                    System.out.println("Has superado 21. Has perdido");
+                    System.out.println("Has superado el limite 21");
                     break;
                 } else if (mano.getPuntuacion() == 21) {
                     System.out.println("BlackJack");
