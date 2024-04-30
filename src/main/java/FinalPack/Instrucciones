@@ -1,0 +1,9 @@
+Para ejecutar el código y que funcione correctamente primero hay que ejecutar la clase Servidor 
+y en ella decir cuántos jugadores van a jugar. Una vez hecho eso, se ejecuta la clase Jugador tantas 
+veces como jugadores se ha puesto que hay en la clase Servidor.
+Se juega la partida de cada jugador y hay que esperar un poco a que finalice la ejecución en todas las clases, 
+en algunas ocasiones le puede costar varios segundos.
+
+La clase Handler implementa la interfaz Runnable. En Servidor se crea un Thread pool donde se mandan a ejecutar
+los hilos correspondientes a la clase Handler de cada Jugador.
+
