@@ -43,10 +43,11 @@ public class Servidor {
     public synchronized static void AddResultado(Juego mano) {
         resultados.add(mano);
     }
+
     private static Juego calcularGanador() {
         Juego ganador = resultados.get(0);
         for (Juego juego : resultados) {
-            if (ganador.getPuntuacion() < juego.getPuntuacion()&& juego.getPuntuacion()<=21) {
+            if (ganador.getPuntuacion() < juego.getPuntuacion() && juego.getPuntuacion() <= 21) {
                 ganador = juego;
             }
         }
@@ -87,14 +88,11 @@ public class Servidor {
             }
             System.out.println("La partida va a comenzar");
             for (int i = 0; i < numjug; i++) {
-                pool.execute(new Handler(clientSockets.get(i), baraja));
+                pool.execute(new Handler(clientSockets.get(i), baraja, i));
             }
             pool.shutdown();
 
-
-            
             //Faltaria ver que pasa si se ejecutan mas de 8 jugadores (deberia funcionar bien, y solo usar los 8 primeros)
-
         } catch (IOException e) {
             System.err.println("Error de escritura: " + e.getMessage());
             e.printStackTrace(System.err);
