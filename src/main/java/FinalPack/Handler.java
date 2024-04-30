@@ -52,7 +52,7 @@ public class Handler implements Runnable {
                     oos.writeObject(mano);
                     oos.reset();
                     System.out.println("Nueva mano " + mano+" con puntuación "+mano.getPuntuacion() );
-                    if (mano.getPuntuacion() > 21) {
+                    if (mano.comprobarSobrepasada()) {
                         System.out.println("El jugador ha superado 21 puntos y pierde");
                         break;
                     } else if (mano.getPuntuacion() == 21) {
