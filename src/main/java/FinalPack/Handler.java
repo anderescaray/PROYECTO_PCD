@@ -120,7 +120,10 @@ public class Handler implements Runnable {
     private Juego calcularGanador() {
         Juego ganador = resultados.get(0);
         for (Juego juego : resultados) {
-            if (ganador.getPuntuacion() < juego.getPuntuacion() && juego.getPuntuacion() <= 21) {
+            if(ganador.getPuntuacion()>21){
+                ganador = juego;
+            }
+            else if (ganador.getPuntuacion() < juego.getPuntuacion() && juego.getPuntuacion() <= 21) {
                 ganador = juego;
             }
         }
