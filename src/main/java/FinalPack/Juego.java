@@ -21,25 +21,26 @@ public class Juego implements Serializable {
     private ArrayList<Carta> ases;
 
     // Creamos una lista para los ases y otra para el resto de cartas y en el constructor
-    // añadimos las dos primeras cartas que nos tocan a su lista correspondiente y mostramos la puntuacion
+    // Añadimos las dos primeras cartas que nos tocan a su lista correspondiente y mostramos la puntuacion
+    // Tener en cuenta, que los ases cuentan distinto, depende de la puntuacion. Pueden contar 11 o 1
     public Juego(Carta c1, Carta c2) {
 
         cartas = new ArrayList();
         ases = new ArrayList();
 
-        if ("A".equals(c1.getValor())) {
+        if ("A".equals(c1.getValor())) { //Si la carta es un as, se añade a su lista
             ases.add(c1);
         } else {
-            cartas.add(c1);
+            cartas.add(c1); //sino a la del resto de cartas
         }
 
-        if ("A".equals(c2.getValor())) {
+        if ("A".equals(c2.getValor())) { //lo mismo con la segunda carta
             ases.add(c2);
         } else {
             cartas.add(c2);
         }
 
-        calcularPuntuacion();
+        calcularPuntuacion(); //se actualiza la puntuacion
 
     }
 
@@ -47,7 +48,7 @@ public class Juego implements Serializable {
         return puntuacion;
     }
 
-    public void pedirCarta(Carta ca) {
+    public void pedirCarta(Carta ca) { //Este metodo, se usa introduciendo una carta nueva que sacaremos de la baraja
 
         // Primero comprobamos si nos ha tocado un AS
         if ("A".equals(ca.getValor())) {
@@ -71,7 +72,7 @@ public class Juego implements Serializable {
 
     }
 
-    private void calcularPuntuacion() {
+    private void calcularPuntuacion() { //este metodo se encarga de actualizar la puntuacion del Juego
 
         puntuacion = 0;
 
@@ -96,7 +97,7 @@ public class Juego implements Serializable {
         }
     }
 
-    public boolean comprobarSobrepasada() {
+    public boolean comprobarSobrepasada() { //calcula si nos hemos pasado del 21
         sobrepasado = puntuacion > 21;
         return sobrepasado;
     }

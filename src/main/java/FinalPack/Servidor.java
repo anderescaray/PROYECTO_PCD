@@ -52,7 +52,7 @@ public class Servidor {
 
         numjug = 0;
         System.out.println("Introduzca el número de jugadores 2-8:");
-        while (true) {
+        while (true) { //Pedimos al usuario determinar el num de jugadores, que será el numero de sockets y clientes
             try {
                 numjug = Integer.parseInt(teclado.readLine());
                 if (numjug >= 2 && numjug <= 8) {
@@ -64,30 +64,26 @@ public class Servidor {
             }
         }
 
-        try (ServerSocket listener = new ServerSocket(55557)) {
+        try (ServerSocket listener = new ServerSocket(55557)) {//Puerto de escucha
 
-            ExecutorService pool = Executors.newFixedThreadPool(numjug);
+            ExecutorService pool = Executors.newFixedThreadPool(numjug); //Para ejecutar todos los hilos (tantos como jugadores)
 
-            //Socket[] listaSockets = new Socket[numjug];
-            for (int i = 0; i < numjug; i++) {
-                System.out.println("Esperando jugadores...");
+            for (int i = 0; i < numjug; i++) { //Vamos aceptando a los jugadores que se conectan.
+                System.out.println("Esperando jugadores..."); //No empieza la partida hasta estar todos conectados
                 Socket clientSocket = listener.accept();
                 clientSockets.add(clientSocket);
-                //listaSockets[i] = listener.accept();
                 System.out.println("Jugador " + (i + 1) + " conectado, " + (numjug - i - 1) + " restantes");
             }
             System.out.println("La partida va a comenzar");
             for (int i = 0; i < numjug; i++) {
-                pool.execute(new Handler(clientSockets.get(i), baraja, i+1));
-            }
+                pool.execute(new Handler(clientSockets.get(i), baraja, i + 1));
+            }//cuando se han conectado todos, lanzamos los hilos y comienza la partida
             pool.shutdown();
 
-            //Faltaria ver que pasa si se ejecutan mas de 8 jugadores (deberia funcionar bien, y solo usar los 8 primeros)
         } catch (IOException e) {
             System.err.println("Error de escritura: " + e.getMessage());
             e.printStackTrace(System.err);
             System.exit(1);
         }
     }
-
 }
