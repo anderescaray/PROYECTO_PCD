@@ -1,4 +1,4 @@
-package FinalPack;
+package BLACKJACK;
 
 import java.io.Serializable;
 import java.util.Objects;
