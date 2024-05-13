@@ -39,18 +39,18 @@ import org.apache.hadoop.security.UserGroupInformation;
 
 public class HadoopMapReduce {
 
-    private static class MapClass extends Mapper<LongWritable, Text, Text, Text> {
+    private static class MapClassEquipo extends Mapper<LongWritable, Text, Text, Text> {
 
         @Override
         protected void map(LongWritable key, Text value, Mapper.Context context) {
             try {
                 String[] str = value.toString().split(",", -1);
-                String genero = str[3];
-                System.out.println("Clave del map " + genero);
+                String equipo = str[0];
+                System.out.println("Clave del map " + equipo);
                 System.out.println("Valor del map " + value);
 
-                if (!("Género".equals(genero))) {
-                    context.write(new Text(genero), new Text(value));
+                if (!("Team".equals(equipo))) {
+                    context.write(new Text(equipo), new Text(value));
                 }
 
             } catch (IOException | InterruptedException e) {
@@ -61,9 +61,9 @@ public class HadoopMapReduce {
 
     }
 
-    private static class ReduceClass extends Reducer<Text, Text, Text, Text> {
+    private static class ReduceClassDelanteros extends Reducer<Text, Text, Text, Text> {
 
-        private int max = -1;
+        private long max = -1;
         private String nombre = null;
 
         @Override
@@ -72,34 +72,33 @@ public class HadoopMapReduce {
             try {
                 max = -1;
                 for (Text val : values) {
-                    String[] str = val.toString().split("\t", -1);
-                    int number = NumberFormat.getNumberInstance(java.util.Locale.US).parse(str[4]).intValue();
-                    if (number > max) {
-                        max = number;
-                        nombre = str[1];
+                    String[] str = val.toString().split(",", -1);
+                    //CALCULAMOS PUNTUACION DE DELANTEROS, Ponderando GOLES, ASISTENCIAS, Y REGATES
+                    long puntuacion = Long.parseLong(str[16])+((Long.parseLong(str[40]))/2)+((Long.parseLong(str[41]))/10);
+                    if (puntuacion > max) {
+                        max = puntuacion;
+                        nombre = str[3];
                     }
 
                 }
                 context.write(new Text(key), new Text(nombre + "\t" + max));
-            } catch (IOException | InterruptedException | ParseException e) {
+            } catch (IOException | InterruptedException e) {
                 System.err.println("Exception" + e.getMessage());
                 e.printStackTrace(System.err);
             }
         }
 
     }
-        private static class PartitionerClass extends Partitioner<Text, Text> {
+        private static class PartitionerClassPosicion extends Partitioner<Text, Text> {
 
         @Override
         public int getPartition(Text key, Text value, int i) {
-            String[] str = value.toString().split("\t", -1);
-            int edad = Integer.parseInt(str[2]);
-            if (edad <= 20) {
+            String[] str = value.toString().split(",", -1);
+            String pos = str[1];
+            if (true){
                 return 0;
-            } else if (edad > 20 && edad <= 30) {
-                return 1;
             } else {
-                return 2;
+                return 1;
 
             }
 
@@ -141,13 +140,13 @@ public class HadoopMapReduce {
                 conf.set("fs.defaultFS", "hdfs://192.168.10.1:9000");
                 Job job = Job.getInstance(conf, "topsal");
                 job.setJarByClass(HadoopMapReduce.class);
-                job.setMapperClass(MapClass.class);
+                job.setMapperClass(MapClassEquipo.class);
                 job.setMapOutputKeyClass(Text.class);
                 job.setMapOutputValueClass(Text.class);
                 
-                job.setPartitionerClass(PartitionerClass.class);
+                job.setPartitionerClass(PartitionerClassPosicion.class);
                 
-                job.setReducerClass(ReduceClass.class);
+                job.setReducerClass(ReduceClassDelanteros.class);
                 job.setNumReduceTasks(3);
                 job.setInputFormatClass(TextInputFormat.class);
                 job.setOutputFormatClass(TextOutputFormat.class);
