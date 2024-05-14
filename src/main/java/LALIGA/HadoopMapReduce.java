@@ -226,7 +226,7 @@ public class HadoopMapReduce {
         int contador = 1;
         StringBuilder sb = new StringBuilder();
         while((linea=br.readLine())!= null){
-            System.out.println("Linea"+(contador++)+" : "+linea);
+            System.out.println(linea);
         }
         br.close();
         fs.close();
