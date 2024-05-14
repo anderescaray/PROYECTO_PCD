@@ -19,6 +19,8 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import java.nio.charset.StandardCharsets;
 import java.security.PrivilegedExceptionAction;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.io.LongWritable;
@@ -225,9 +227,17 @@ public class HadoopMapReduce {
         String linea;
         int contador = 1;
         StringBuilder sb = new StringBuilder();
+        //ArrayList<String>lineas=new ArrayList<>();
         while((linea=br.readLine())!= null){
+            //lineas.add(linea);
             System.out.println(linea);
         }
+        /*
+        for(String l:lineas){
+            Collections.sort(lineas,l.split("\t")[2]);
+        }
+        */
+        
         br.close();
         fs.close();
         
