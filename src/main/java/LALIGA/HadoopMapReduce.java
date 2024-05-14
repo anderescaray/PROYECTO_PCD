@@ -9,6 +9,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.io.OutputStreamWriter;
 import java.net.URISyntaxException;
@@ -19,6 +20,7 @@ import org.apache.hadoop.fs.Path;
 import java.nio.charset.StandardCharsets;
 import java.security.PrivilegedExceptionAction;
 import java.util.Scanner;
+import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.io.Text;
@@ -78,7 +80,7 @@ public class HadoopMapReduce {
 
                 }
                 context.write(new Text(key), new Text(nombre + "\t" + max));
-                System.out.println(nombre + ": " + max);
+
             } catch (IOException | InterruptedException e) {
                 System.err.println("Exception" + e.getMessage());
                 e.printStackTrace(System.err);
@@ -108,7 +110,7 @@ public class HadoopMapReduce {
 
                 }
                 context.write(new Text(key), new Text(nombre + "\t" + max));
-                System.out.println(nombre + ": " + max);
+
             } catch (IOException | InterruptedException e) {
                 System.err.println("Exception" + e.getMessage());
                 e.printStackTrace(System.err);
@@ -138,7 +140,7 @@ public class HadoopMapReduce {
 
                 }
                 context.write(new Text(key), new Text(nombre + "\t" + max));
-                System.out.println(nombre + ": " + max);
+
             } catch (IOException | InterruptedException e) {
                 System.err.println("Exception" + e.getMessage());
                 e.printStackTrace(System.err);
@@ -168,7 +170,7 @@ public class HadoopMapReduce {
 
                 }
                 context.write(new Text(key), new Text(nombre + "\t" + max));
-                System.out.println(nombre + ": " + max);
+
             } catch (IOException | InterruptedException e) {
                 System.err.println("Exception" + e.getMessage());
                 e.printStackTrace(System.err);
@@ -215,6 +217,23 @@ public class HadoopMapReduce {
         br.close();
         fileSystem.close();
     }
+        public static void readFileFromHDFS(String hdfsFilePath,FileSystem fs  ) throws IOException{
+       
+        Path hdfsReadPath = new Path(hdfsFilePath);
+        FSDataInputStream fsDataInputStrean = fs.open(hdfsReadPath);
+        BufferedReader br = new BufferedReader(new InputStreamReader(fsDataInputStrean));
+        String linea;
+        int contador = 1;
+        StringBuilder sb = new StringBuilder();
+        while((linea=br.readLine())!= null){
+            System.out.println("Linea"+(contador++)+" : "+linea);
+        }
+        br.close();
+        fs.close();
+        
+        
+        
+    }
 
     public static void main(String[] args) {
         try {
@@ -229,6 +248,7 @@ public class HadoopMapReduce {
             ugi.doAs(new PrivilegedExceptionAction<Void>() {
                 public Void run() throws Exception {
                     Configuration conf = new Configuration();
+                    FileSystem fileSystem = FileSystem.get(new URI("hdfs://192.168.10.1:9000"), conf,"a_83013");
                     conf.set("fs.defaultFS", "hdfs://192.168.10.1:9000");
                     Job job = Job.getInstance(conf, "topsal");
                     job.setJarByClass(HadoopMapReduce.class);
@@ -246,15 +266,19 @@ public class HadoopMapReduce {
                     System.out.println("4: Delanteros");
 
                     String eleccion = teclado.nextLine();
-                    
+                    String fileName ="/PCD2024/a_83013/mapreduce_particionLaLiga/";
                     if (eleccion.equals("1")) {
                         job.setReducerClass(ReduceClassPorteros.class);
+                        fileName +="part-r-00000";
                     } else if (eleccion.equals("2")) {
                         job.setReducerClass(ReduceClassDefensas.class);
+                        fileName +="part-r-00001";
                     } else if (eleccion.equals("3")) {
                         job.setReducerClass(ReduceClassMedios.class);
+                        fileName +="part-r-00002";
                     } else {
                         job.setReducerClass(ReduceClassDelanteros.class);
+                        fileName +="part-r-00003";
                     }
 
                     job.setNumReduceTasks(4);
@@ -268,11 +292,13 @@ public class HadoopMapReduce {
 
                     boolean finalizado = job.waitForCompletion(true);
                     System.out.println("Finalizado: " + finalizado);
-                    System.out.println("LEER ARCHIVO DE PARTICION CORRESPONDIENTE: ");
-                    
+                    System.out.println("RESULTADO: ");
+                    readFileFromHDFS(fileName, fileSystem);
                     return null;
                 }
             });
+            
+            
         } catch (Exception e) {
             System.err.println("Exception" + e.getMessage());
             e.printStackTrace(System.err);
