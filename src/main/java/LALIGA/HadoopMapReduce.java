@@ -36,7 +36,6 @@ import org.apache.hadoop.security.UserGroupInformation;
  *
  * @author alumno
  */
-
 public class HadoopMapReduce {
 
     private static class MapClassEquipo extends Mapper<LongWritable, Text, Text, Text> {
@@ -74,7 +73,7 @@ public class HadoopMapReduce {
                 for (Text val : values) {
                     String[] str = val.toString().split(",", -1);
                     //CALCULAMOS PUNTUACION DE DELANTEROS, Ponderando GOLES, ASISTENCIAS, Y REGATES
-                    long puntuacion = Long.parseLong(str[16])+((Long.parseLong(str[40]))/2)+((Long.parseLong(str[41]))/10);
+                    long puntuacion = Long.parseLong(str[16]) + ((Long.parseLong(str[40])) / 2) + ((Long.parseLong(str[41])) / 10);
                     if (puntuacion > max) {
                         max = puntuacion;
                         nombre = str[3];
@@ -89,20 +88,108 @@ public class HadoopMapReduce {
         }
 
     }
-        private static class PartitionerClassPosicion extends Partitioner<Text, Text> {
+
+    private static class ReduceClassMedios extends Reducer<Text, Text, Text, Text> {
+
+        private long max = -1;
+        private String nombre = null;
+
+        @Override
+        protected void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
+
+            try {
+                max = -1;
+                for (Text val : values) {
+                    String[] str = val.toString().split(",", -1);
+                    //CALCULAMOS PUNTUACION DE MEDIOS, Ponderando ASISTENCIAS, GOLES (menor importancia), RECUPERACIONES, y PASES LARGOS 
+                    long puntuacion = Long.parseLong(str[40]) + ((Long.parseLong(str[16])) / 2) + ((Long.parseLong(str[59])) / 10) + ((Long.parseLong(str[22])) / 10);
+                    if (puntuacion > max) {
+                        max = puntuacion;
+                        nombre = str[3];
+                    }
+
+                }
+                context.write(new Text(key), new Text(nombre + "\t" + max));
+            } catch (IOException | InterruptedException e) {
+                System.err.println("Exception" + e.getMessage());
+                e.printStackTrace(System.err);
+            }
+        }
+
+    }
+
+    private static class ReduceClassDefensas extends Reducer<Text, Text, Text, Text> {
+
+        private long max = -1;
+        private String nombre = null;
+
+        @Override
+        protected void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
+
+            try {
+                max = -1;
+                for (Text val : values) {
+                    String[] str = val.toString().split(",", -1);
+                    //CALCULAMOS PUNTUACION DE DEFENSAS, Ponderando DUELOS GANADOS, DUELOS PERDIDOS, TARJETAS ROJAS e INTERCEPCIONES 
+                    long puntuacion = ((Long.parseLong(str[24])) / 10) - ((Long.parseLong(str[25])) / 10) - (Long.parseLong(str[14])) + ((Long.parseLong(str[23])) / 2);
+                    if (puntuacion > max) {
+                        max = puntuacion;
+                        nombre = str[3];
+                    }
+
+                }
+                context.write(new Text(key), new Text(nombre + "\t" + max));
+            } catch (IOException | InterruptedException e) {
+                System.err.println("Exception" + e.getMessage());
+                e.printStackTrace(System.err);
+            }
+        }
+
+    }
+    
+    private static class ReduceClassPorteros extends Reducer<Text, Text, Text, Text> {
+
+        private long max = -1;
+        private String nombre = null;
+
+        @Override
+        protected void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
+
+            try {
+                max = -1;
+                for (Text val : values) {
+                    String[] str = val.toString().split(",", -1);
+                    //CALCULAMOS PUNTUACION DE PORTEROS, Ponderando GOLES EN CONTRA
+                    long puntuacion = 100 - (Long.parseLong(str[19]));
+                    if (puntuacion > max) {
+                        max = puntuacion;
+                        nombre = str[3];
+                    }
+
+                }
+                context.write(new Text(key), new Text(nombre + "\t" + max));
+            } catch (IOException | InterruptedException e) {
+                System.err.println("Exception" + e.getMessage());
+                e.printStackTrace(System.err);
+            }
+        }
+
+    }
+
+    private static class PartitionerClassPosicion extends Partitioner<Text, Text> {
 
         @Override
         public int getPartition(Text key, Text value, int i) {
             String[] str = value.toString().split(",", -1);
             String pos = str[1];
-            if (pos.equals("Goalkeeper")){
+            if (pos.equals("Goalkeeper")) {
                 return 0;
-            } else if(pos.equals("Defender")) {
+            } else if (pos.equals("Defender")) {
                 return 1;
 
-            }else if(pos.equals("Midfielder")){
+            } else if (pos.equals("Midfielder")) {
                 return 2;
-            }else{
+            } else {
                 return 3;
             }
 
@@ -137,40 +224,38 @@ public class HadoopMapReduce {
 
         }
         UserGroupInformation ugi = UserGroupInformation.createRemoteUser("a_83013");
-        try{
-        ugi.doAs(new PrivilegedExceptionAction<Void>() {
-            public Void run() throws Exception {
-                Configuration conf = new Configuration();
-                conf.set("fs.defaultFS", "hdfs://192.168.10.1:9000");
-                Job job = Job.getInstance(conf, "topsal");
-                job.setJarByClass(HadoopMapReduce.class);
-                job.setMapperClass(MapClassEquipo.class);
-                job.setMapOutputKeyClass(Text.class);
-                job.setMapOutputValueClass(Text.class);
-                
-                job.setPartitionerClass(PartitionerClassPosicion.class);
-                
-                job.setReducerClass(ReduceClassDelanteros.class);
-                job.setNumReduceTasks(4);
-                job.setInputFormatClass(TextInputFormat.class);
-                job.setOutputFormatClass(TextOutputFormat.class);
-                job.setOutputKeyClass(Text.class);
-                job.setOutputValueClass(Text.class);
+        try {
+            ugi.doAs(new PrivilegedExceptionAction<Void>() {
+                public Void run() throws Exception {
+                    Configuration conf = new Configuration();
+                    conf.set("fs.defaultFS", "hdfs://192.168.10.1:9000");
+                    Job job = Job.getInstance(conf, "topsal");
+                    job.setJarByClass(HadoopMapReduce.class);
+                    job.setMapperClass(MapClassEquipo.class);
+                    job.setMapOutputKeyClass(Text.class);
+                    job.setMapOutputValueClass(Text.class);
 
-                FileInputFormat.addInputPath(job, new Path("/PCD2024/a_83013/laLigaHadoop/"));
-                FileOutputFormat.setOutputPath(job, new Path("/PCD2024/a_83013/mapreduce_particionLaLiga"));
+                    job.setPartitionerClass(PartitionerClassPosicion.class);
 
-                boolean finalizado = job.waitForCompletion(true);
-                System.out.println("Finalizado: " + finalizado);
-                return null;
-            }
-        });
-        }catch(Exception e){
+                    job.setReducerClass(ReduceClassDelanteros.class);
+                    job.setNumReduceTasks(4);
+                    job.setInputFormatClass(TextInputFormat.class);
+                    job.setOutputFormatClass(TextOutputFormat.class);
+                    job.setOutputKeyClass(Text.class);
+                    job.setOutputValueClass(Text.class);
+
+                    FileInputFormat.addInputPath(job, new Path("/PCD2024/a_83013/laLigaHadoop/"));
+                    FileOutputFormat.setOutputPath(job, new Path("/PCD2024/a_83013/mapreduce_particionLaLiga"));
+
+                    boolean finalizado = job.waitForCompletion(true);
+                    System.out.println("Finalizado: " + finalizado);
+                    return null;
+                }
+            });
+        } catch (Exception e) {
             System.err.println("Exception" + e.getMessage());
             e.printStackTrace(System.err);
         }
-
-    
 
     }
 }
