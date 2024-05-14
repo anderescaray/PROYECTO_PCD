@@ -95,11 +95,15 @@ public class HadoopMapReduce {
         public int getPartition(Text key, Text value, int i) {
             String[] str = value.toString().split(",", -1);
             String pos = str[1];
-            if (true){
+            if (pos.equals("Goalkeeper")){
                 return 0;
-            } else {
+            } else if(pos.equals("Defender")) {
                 return 1;
 
+            }else if(pos.equals("Midfielder")){
+                return 2;
+            }else{
+                return 3;
             }
 
         }
@@ -147,7 +151,7 @@ public class HadoopMapReduce {
                 job.setPartitionerClass(PartitionerClassPosicion.class);
                 
                 job.setReducerClass(ReduceClassDelanteros.class);
-                job.setNumReduceTasks(3);
+                job.setNumReduceTasks(4);
                 job.setInputFormatClass(TextInputFormat.class);
                 job.setOutputFormatClass(TextOutputFormat.class);
                 job.setOutputKeyClass(Text.class);
