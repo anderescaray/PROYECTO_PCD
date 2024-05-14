@@ -18,8 +18,7 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import java.nio.charset.StandardCharsets;
 import java.security.PrivilegedExceptionAction;
-import java.text.NumberFormat;
-import java.text.ParseException;
+import java.util.Scanner;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.io.Text;
@@ -45,9 +44,7 @@ public class HadoopMapReduce {
             try {
                 String[] str = value.toString().split(",", -1);
                 String equipo = str[0];
-                System.out.println("Clave del map " + equipo);
-                System.out.println("Valor del map " + value);
-
+               
                 if (!("Team".equals(equipo))) {
                     context.write(new Text(equipo), new Text(value));
                 }
@@ -81,6 +78,7 @@ public class HadoopMapReduce {
 
                 }
                 context.write(new Text(key), new Text(nombre + "\t" + max));
+                System.out.println(nombre + ": " + max);
             } catch (IOException | InterruptedException e) {
                 System.err.println("Exception" + e.getMessage());
                 e.printStackTrace(System.err);
@@ -110,6 +108,7 @@ public class HadoopMapReduce {
 
                 }
                 context.write(new Text(key), new Text(nombre + "\t" + max));
+                System.out.println(nombre + ": " + max);
             } catch (IOException | InterruptedException e) {
                 System.err.println("Exception" + e.getMessage());
                 e.printStackTrace(System.err);
@@ -139,6 +138,7 @@ public class HadoopMapReduce {
 
                 }
                 context.write(new Text(key), new Text(nombre + "\t" + max));
+                System.out.println(nombre + ": " + max);
             } catch (IOException | InterruptedException e) {
                 System.err.println("Exception" + e.getMessage());
                 e.printStackTrace(System.err);
@@ -146,7 +146,7 @@ public class HadoopMapReduce {
         }
 
     }
-    
+
     private static class ReduceClassPorteros extends Reducer<Text, Text, Text, Text> {
 
         private long max = -1;
@@ -159,8 +159,8 @@ public class HadoopMapReduce {
                 max = -1;
                 for (Text val : values) {
                     String[] str = val.toString().split(",", -1);
-                    //CALCULAMOS PUNTUACION DE PORTEROS, Ponderando GOLES EN CONTRA
-                    long puntuacion = 100 - (Long.parseLong(str[19]));
+                    //CALCULAMOS PUNTUACION DE PORTEROS, Ponderando GOLES EN CONTRA y PARTIDOS JUGADOS
+                    long puntuacion = ((Long.parseLong(str[5]))*2) - (Long.parseLong(str[19]));
                     if (puntuacion > max) {
                         max = puntuacion;
                         nombre = str[3];
@@ -168,6 +168,7 @@ public class HadoopMapReduce {
 
                 }
                 context.write(new Text(key), new Text(nombre + "\t" + max));
+                System.out.println(nombre + ": " + max);
             } catch (IOException | InterruptedException e) {
                 System.err.println("Exception" + e.getMessage());
                 e.printStackTrace(System.err);
@@ -237,7 +238,25 @@ public class HadoopMapReduce {
 
                     job.setPartitionerClass(PartitionerClassPosicion.class);
 
-                    job.setReducerClass(ReduceClassDelanteros.class);
+                    Scanner teclado = new Scanner(System.in);
+                    System.out.println("ESCOJA POSICION A COMPARAR: ");
+                    System.out.println("1: Porteros");
+                    System.out.println("2: Defensas");
+                    System.out.println("3: Mediocentros");
+                    System.out.println("4: Delanteros");
+
+                    String eleccion = teclado.nextLine();
+                    
+                    if (eleccion.equals("1")) {
+                        job.setReducerClass(ReduceClassPorteros.class);
+                    } else if (eleccion.equals("2")) {
+                        job.setReducerClass(ReduceClassDefensas.class);
+                    } else if (eleccion.equals("3")) {
+                        job.setReducerClass(ReduceClassMedios.class);
+                    } else {
+                        job.setReducerClass(ReduceClassDelanteros.class);
+                    }
+
                     job.setNumReduceTasks(4);
                     job.setInputFormatClass(TextInputFormat.class);
                     job.setOutputFormatClass(TextOutputFormat.class);
@@ -249,6 +268,8 @@ public class HadoopMapReduce {
 
                     boolean finalizado = job.waitForCompletion(true);
                     System.out.println("Finalizado: " + finalizado);
+                    System.out.println("LEER ARCHIVO DE PARTICION CORRESPONDIENTE: ");
+                    
                     return null;
                 }
             });
